@@ -1,0 +1,42 @@
+name: earthnet 
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.12
+  - numpy<2
+  - basemap
+  - blackdoc
+  - bottleneck
+  - cartopy
+  - einops
+  - flake8
+  - geopandas
+  - ipykernel
+  - ipywidgets
+  - isort
+  - joblib
+  - jupyter
+  - jupyterlab
+  - matplotlib
+  - omegaconf
+  - pandas
+  - pre-commit
+  - pytest
+  - python-dotenv
+  - pytorch
+  - pytorch-cuda
+  - pytorch-lightning
+  - scikit-learn
+  - scipy
+  - tensorboard
+  - timm
+  - torchdiffeq
+  - torchvision
+  - tqdm
+  - xbatcher
+  - pip
+  - pip:
+    - "black[jupyter]"
+    - "xarray[complete]"

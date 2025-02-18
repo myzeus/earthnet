@@ -1,0 +1,321 @@
+version: 0.0.1
+data:
+  train:
+      target: zeus.datasets.common.CommonGridMultiModalDataset
+      params:
+        # data_dir: data/GEO-ATMS-VIIRS-MIRS/train/
+        data_dir: data/GEO-ATMS-VIIRS-MIRS/test/
+        domains:
+          mirs_img:
+            vars: ['TSkin', 'SurfP', 'Emis', 'TPW', 'RWP', 'CLW']
+            variable_coords:
+              Channel: [0, 1, 2]
+
+          mirs_snd_temp:
+            vars: ['PTemp',]
+            variable_coords:
+              level: [1000, 975, 950, 925, 900, 875, 850, 825, 800, 775, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 225, 200, 175, 150, 125, 100, 70, 50, 30, 20, 10, 7, 5, 3, 2, 1]
+
+          mirs_snd_vapor:
+            vars: ['PVapor',]
+            variable_coords:
+              level: [1000, 975, 950, 925, 900, 875, 850, 825, 800, 775, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 225, 200, 175, 150, 125, 100, 70, 50, 30, 20, 10, 7, 5, 3, 2, 1]
+
+          mirs_rain:
+            vars: ['RR',]
+
+          goes16:
+            product: ABI-L1b-RadF
+            sensor: goes16
+            variable_coords:
+                band: [7,8,9,10,11,12,13,14,15,16]
+            source: discover
+            vars: ['Rad']
+
+          goes18:
+            product: ABI-L1b-RadF
+            sensor: goes18
+            variable_coords:
+                band: [7,8,9,10,11,12,13,14,15,16]
+            source: discover
+            vars: ['Rad']
+
+          gk2a:
+            product: FD
+            sensor: gk2a
+            variable_coords:
+                band: [7,8,9,10,11,12,13,14,15,16]
+            vars: ['Rad']
+
+          seviri:
+            product: HRSEVIRI
+            vars: ['Rad']
+            variable_coords:
+              band: ['WV_062', 'WV_073', 'IR_016', 'IR_039', 'IR_087', 'IR_097', 'IR_108', 'IR_120', 'IR_134']
+
+          atms:
+            vars: ['brightness_temp']
+            variable_coords:
+              channel: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+
+          viirs:
+            vars: ['M08', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15', 'M16']
+
+          srtm:
+            vars: ['elevation', 'lsm']
+
+        patch_size: 144
+        jitter: 32
+        jitter_t: 0
+        random_flip: True
+        timesteps: 12
+        bounds: [-180, -90, 180, 90]
+
+  test:
+      target: zeus.datasets.common.CommonGridMultiModalDataset
+      params:
+        data_dir: data/GEO-ATMS-VIIRS-MIRS/test
+        domains:
+          mirs_img:
+            vars: ['TSkin', 'SurfP', 'Emis', 'TPW', 'RWP', 'CLW']
+            variable_coords:
+              Channel: [0, 1, 2]
+
+          mirs_snd_temp:
+            vars: ['PTemp',]
+            variable_coords:
+              level: [1000, 975, 950, 925, 900, 875, 850, 825, 800, 775, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 225, 200, 175, 150, 125, 100, 70, 50, 30, 20, 10, 7, 5, 3, 2, 1]
+
+          mirs_snd_vapor:
+            vars: ['PVapor',]
+            variable_coords:
+              level: [1000, 975, 950, 925, 900, 875, 850, 825, 800, 775, 750, 700, 650, 600, 550, 500, 450, 400, 350, 300, 250, 225, 200, 175, 150, 125, 100, 70, 50, 30, 20, 10, 7, 5, 3, 2, 1]
+
+          mirs_rain:
+            vars: ['RR',]
+
+          goes16:
+            product: ABI-L1b-RadF
+            sensor: goes16
+            variable_coords:
+                band: [7,8,9,10,11,12,13,14,15,16]
+            source: discover
+            vars: ['Rad']
+
+          goes18:
+            product: ABI-L1b-RadF
+            sensor: goes18
+            variable_coords:
+                band: [7,8,9,10,11,12,13,14,15,16]
+            source: discover
+            vars: ['Rad']
+
+          gk2a:
+            product: FD
+            sensor: gk2a
+            variable_coords:
+                band: [7,8,9,10,11,12,13,14,15,16]
+            vars: ['Rad']
+
+          seviri:
+            product: HRSEVIRI
+            vars: ['Rad']
+            variable_coords:
+              band: ['WV_062', 'WV_073', 'IR_016', 'IR_039', 'IR_087', 'IR_097', 'IR_108', 'IR_120', 'IR_134']
+
+          atms:
+            vars: ['brightness_temp']
+            variable_coords:
+              channel: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+
+          viirs:
+            vars: ['M08', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15', 'M16']
+
+          srtm:
+            vars: ['elevation', 'lsm']
+
+        patch_size: 144
+        timesteps: 12
+        bounds: [-180, -90, 180, 90]
+
+
+model:
+  target: earthnet.model.EarthNetv1
+  params:
+    img_size: 144
+    embed_dim: 768
+    depth: 12
+    num_heads: 12
+    decoder_num_heads: 8
+    decoder_dim: 384
+    decoder_depth: 6
+    num_encoded_tokens: 768
+    learning_rate: 0.00005
+    adapters_config:
+      goes16:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 10
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          kl_weight: 1e-6
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                goes16: 10
+              dim: 1
+      goes18:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 10
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                goes18: 10
+              dim: 1
+      gk2a:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 10
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                gk2a: 10
+              dim: 1
+      seviri:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 9
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          kl_weight: 1e-6
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                seviri: 9
+              dim: 1
+      atms:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 22
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          kl_weight: 1e-6
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                atms: 22
+      viirs:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 8
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          latent_dim: 32
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                viirs: 8
+                  # dim: 1
+      srtm:
+        target: earthnet.model.PatchedAdapter2D
+        params:
+          num_channels: 2
+          stride_level: 1
+          latent_dim: 512
+          kl_weight: 1e-6
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                srtm: 2
+      mirs_img:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 8
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          latent_dim: 128
+          encoder_transformer: True
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                mirs_img: 8
+                  # dim: 1
+      mirs_snd_vapor:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 37
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          encoder_transformer: True
+          latent_dim: 128
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                mirs_snd_vapor: 37
+                  # dim: 1
+
+      mirs_snd_temp:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 37
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          encoder_transformer: True
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                mirs_snd_temp: 37
+                  # dim: 1
+
+      mirs_rain:
+        target: earthnet.model.PatchedAdapter3D
+        params:
+          num_channels: 1
+          stride_level: 1
+          num_frames: 12
+          t_patch_size: 1
+          latent_dim: 32
+          encoder_transformer: True
+          data_transform_config:
+            target: earthnet.datasets.transform.StandardScalar
+            params:
+              keys:
+                mirs_rain: 1
+
+    patch_size: 16
+    log_step: 100
+    ckpt_path: checkpoints/earthnet.v1.ckpt
+
+trainer:
+  path: checkpoints/multimae-earth-1/
+  load_ckpt_path: last
+  batch_size: 2
+  max_iterations: 1000000
+  log_step: 100
+  checkpoint_step: 1000
+  n_gpus: 1
+  accumulate_grad_batches: 1
